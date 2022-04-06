@@ -12,7 +12,7 @@ const postRouter = require('./routes/post')
 
 
 dotenv.config();
-const port = 8000;
+const port = process.env.PORT;
 
 mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
