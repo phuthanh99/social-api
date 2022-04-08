@@ -44,20 +44,19 @@ router.delete("/:id", async (req, res) => {
 })
 
 // Get a user
-router.get("/:id", async (req, res) => {
-    if (req.params.id || req.body.isAdmin) {
-        try {
-            const user = await User.findById(req.params.id);
-            const { password, updatedAt, ...other } = user._doc
-            res.status(200).json(other)
-        } catch (err) {
-            return res.status(500).json(err);
-        }
-
-    } else {
-        return res.status(403).json("You can delete only your account!");
-    }
-})
+router.get("/", async (req, res) => {
+  const userId = req.query.userId;
+  const username = req.query.username;
+  try {
+    const user = userId
+      ? await User.findById(userId)
+      : await User.findOne({ username: username });
+    const { password, updatedAt, ...other } = user._doc;
+    res.status(200).json(other);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 // Follow user
 router.put("/:id/follow", async (req, res) => {
