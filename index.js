@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const userRouter = require('./routes/users')
 const authRouter = require('./routes/auth')
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGO_URL, {
         console.log('Error in DB connection');
     }
 });
+app.use(cors());
 
 // middleware
 app.use(express.json());
