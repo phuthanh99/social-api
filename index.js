@@ -11,9 +11,11 @@ const path = require("path");
 const userRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
 const postRouter = require("./routes/post");
+const conversationRoute = require("./routes/conversations");
+const messageRoute = require("./routes/messages");
 
 dotenv.config();
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 
 mongoose.connect(
 	process.env.MONGO_URL,
@@ -60,6 +62,8 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/conversations", conversationRoute);
+app.use("/api/messages", messageRoute);
 
 app.listen(port, () => {
 	console.log(
