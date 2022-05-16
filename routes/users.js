@@ -5,16 +5,27 @@ const bcrypt = require("bcrypt");
 // Update user
 router.put("/:id", async (req, res) => {
 	if (req.body.userId === req.params.id || req.body.isAdmin) {
-		if (req.body.password) {
-			try {
-				const salt = await bcrypt.genSalt(10);
-				req.body.password = await bcrypt.hash(req.body.password, salt);
-			} catch (err) {
-				return res.status(500).json(err);
+		if (req.body.currentPassword && req.body.password) {
+			const user = await User.findOne({
+				_id: req.body.userId,
+			});
+			const validPassword = await bcrypt.compare(
+				req.body.currentPassword,
+				user.password
+			);
+			if (validPassword) {
+				try {
+					const salt = await bcrypt.genSalt(10);
+					req.body.password = await bcrypt.hash(req.body.password, salt);
+				} catch (err) {
+					return res.status(500).json(err);
+				}
+			} else {
+				return res.status(404).json("wrong password");
 			}
 		}
 		try {
-			const user = await User.findByIdAndUpdate(req.params.id, {
+			await User.findByIdAndUpdate(req.params.id, {
 				$set: req.body,
 			});
 			res.status(200).json("Account has been updated");
@@ -88,7 +99,6 @@ router.put("/:id/follow", async (req, res) => {
 			} else {
 				return res.status(403).json("You allready follow this user!");
 			}
-			res.status(200).json(other);
 		} catch (err) {
 			return res.status(500).json(err);
 		}
@@ -110,7 +120,6 @@ router.put("/:id/unfollow", async (req, res) => {
 			} else {
 				return res.status(403).json("You dont follow this user!");
 			}
-			res.status(200).json(other);
 		} catch (err) {
 			return res.status(500).json(err);
 		}
