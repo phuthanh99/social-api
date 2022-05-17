@@ -59,6 +59,23 @@ router.put("/:id/like", async (req, res) => {
 	}
 });
 
+//hide and show a post
+router.put("/:id/hide", async (req, res) => {
+	try {
+		const post = await Post.findById(req.params.id);
+
+		if (!post.hide.includes(req.body.userId)) {
+			await post.updateOne({ $push: { hide: req.body.userId } });
+			res.status(200).json("The post has been hided");
+		} else {
+			await post.updateOne({ $pull: { hide: req.body.userId } });
+			res.status(200).json("The post has been show");
+		}
+	} catch (err) {
+		return res.status(500).json(err);
+	}
+});
+
 // Get a post
 router.get("/:id", async (req, res) => {
 	try {
