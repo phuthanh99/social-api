@@ -48,7 +48,6 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("common"));
 
-
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/posts", postRouter);
@@ -61,7 +60,7 @@ app.use("/api/search", seacrchRoute);
 
 const io = new Server(server, {
 	cors: {
-		origin: "http://localhost:3000",
+		origin: `http://localhost:${port}`,
 		methods: ["GET", "POST"],
 	},
 });
