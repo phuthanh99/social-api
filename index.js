@@ -60,7 +60,7 @@ app.use("/api/search", seacrchRoute);
 
 const io = new Server(server, {
 	cors: {
-		origin: `https://api-social-pusta.herokuapp.com`,
+		origin: `http://localhost:${port}`,
 		methods: ["GET", "POST"],
 	},
 });
