@@ -60,7 +60,7 @@ app.use("/api/search", seacrchRoute);
 
 const io = new Server(server, {
 	cors: {
-		origin: "https://pusta.vercel.app/",
+		origin: "https://pusta.vercel.app",
 		methods: ["GET", "POST"],
 	},
 });
